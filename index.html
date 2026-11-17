@@ -1,1 +1,698 @@
-物理项目作业
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#05070f">
+  <meta name="description" content="角动量守恒定律 H5 虚拟仿真实验：旋转平台、子弹撞杆、AI 助教与自适应测评。无需安装，浏览器打开即用。">
+  <meta name="color-scheme" content="dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="角动量实验室">
+  <meta property="og:title" content="角动量守恒 · 虚拟仿真实验室">
+  <meta property="og:description" content="可交互、可对话、可评估的大学物理 H5 实验：拖动配重，观察 L=Iω 的守恒与能量的变化。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://J66k6.github.io/wulizuoye/">
+  <meta property="og:image" content="./assets/img/og.png">
+  <title>角动量守恒 · 虚拟仿真实验室</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
+  <link rel="apple-touch-icon" href="./assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./assets/css/main.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M12 5a7 7 0 1 1-6.7 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5 5v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-record" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M15 4h5v5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" fill="currentColor"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="currentColor" opacity=".7"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 11.5L20 4l-7.5 16-2.1-6.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10.4 13.6L20 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M15 9.2a4 4 0 0 1 0 5.6M17.6 6.8a7.4 7.4 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5L20 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9.4 9.2a2.7 2.7 0 1 1 4.2 2.2c-.9.6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19.5h16M6.5 16V9M11 16V5.5M15.5 16v-4M20 16V7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-report" viewBox="0 0 24 24"><path d="M6 3.5h8l4 4v13H6z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6M9 8.5h2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">跳到实验内容</a>
+
+  <div class="boot" id="boot" aria-hidden="true">
+    <div class="boot-orbit"><span class="boot-core"></span><span class="boot-dot"></span></div>
+    <div class="boot-title">角动量实验室</div>
+    <div class="boot-sub">正在初始化物理引擎<span class="boot-dots"></span></div>
+  </div>
+
+  <div class="app-shell" id="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#lab" data-view-link="lab" aria-label="返回实验台">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="6" fill="url(#g-brand)"/><ellipse cx="20" cy="20" rx="15" ry="6.5" fill="none" stroke="#4fe6ff" stroke-width="1.4" transform="rotate(-28 20 20)" opacity=".9"/><ellipse cx="20" cy="20" rx="15" ry="6.5" fill="none" stroke="#9d7bff" stroke-width="1.1" transform="rotate(52 20 20)" opacity=".55"/><circle cx="32" cy="14" r="2.1" fill="#9df7ff"/><defs><radialGradient id="g-brand"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#4fe6ff"/></radialGradient></defs></svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">角动量实验室</span>
+          <span class="brand-sub">ANGULAR MOMENTUM LAB</span>
+        </span>
+      </a>
+
+      <nav class="tabs" role="tablist" aria-label="实验模块">
+        <button class="tab is-active" role="tab" aria-selected="true" data-view="lab">
+          <span class="tab-ico">◐</span><span>实验台</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-view="collision">
+          <span class="tab-ico">⌁</span><span>碰撞实验</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-view="quiz">
+          <span class="tab-ico">◎</span><span>智能测评</span>
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-view="report">
+          <span class="tab-ico">▤</span><span>学习报告</span>
+        </button>
+      </nav>
+
+      <div class="top-actions">
+        <button class="btn btn-tutor" id="btn-tutor" aria-label="打开 AI 助教">
+          <svg class="icon"><use href="#i-spark"/></svg>
+          <span class="btn-tutor-text">AI 助教</span>
+          <span class="tutor-badge" id="tutor-badge" hidden>1</span>
+        </button>
+        <button class="icon-btn" id="btn-help" aria-label="帮助与关于">
+          <svg class="icon"><use href="#i-help"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ================= 实验台 ================= -->
+      <section class="view is-active" id="view-lab" role="tabpanel" aria-label="旋转平台实验台">
+        <div class="welcome" id="welcome-banner">
+          <div class="welcome-orb" aria-hidden="true"></div>
+          <div class="welcome-copy">
+            <strong>欢迎来到角动量实验室</strong>
+            <p>转动平台，拖动两侧哑铃改变半径。先预测，再操作，最后让 AI 帮你分析数据。</p>
+          </div>
+          <div class="welcome-actions">
+            <button class="btn btn-ghost btn-sm" id="btn-welcome-ai">AI 导学 3 分钟</button>
+            <button class="icon-btn icon-btn-sm" id="btn-welcome-close" aria-label="关闭欢迎提示">
+              <svg class="icon"><use href="#i-close"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="lab-grid">
+          <div class="card stage-card">
+            <div class="stage-head">
+              <div class="stage-title">
+                <span class="live-dot" aria-hidden="true"></span>
+                <h2>旋转平台 · 收臂实验</h2>
+                <span class="pill" id="spin-state">运行中</span>
+              </div>
+              <div class="stage-actions">
+                <button class="stage-btn" id="btn-spin" title="开始 / 暂停">
+                  <svg class="icon"><use href="#i-pause"/></svg><span>暂停</span>
+                </button>
+                <button class="stage-btn" id="btn-arm" title="让配重自动收向中心">
+                  <svg class="icon"><use href="#i-target"/></svg><span>收臂演示</span>
+                </button>
+                <button class="stage-btn" id="btn-record" title="记录当前数据">
+                  <svg class="icon"><use href="#i-record"/></svg><span>记录数据</span>
+                </button>
+                <button class="stage-btn icon-only" id="btn-fullscreen" aria-label="全屏查看" title="全屏">
+                  <svg class="icon"><use href="#i-expand"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="stage-canvas-wrap" id="lab-stage">
+              <canvas id="lab-canvas" aria-label="旋转平台三维透视仿真：中央为实验者，两侧哑铃随半径变化，平台持续旋转"></canvas>
+              <div class="canvas-hint" id="lab-hint">
+                <span class="hint-dot"></span>拖动哑铃可改变半径
+              </div>
+              <div class="canvas-badge" id="lab-speed-badge">ω = 1.20 rad/s</div>
+            </div>
+
+            <div class="hud" aria-label="实时物理量">
+              <div class="hud-item">
+                <span class="hud-label">转动惯量 I</span>
+                <span class="hud-value" id="hud-I">1.94</span>
+                <span class="hud-unit">kg·m²</span>
+              </div>
+              <div class="hud-item">
+                <span class="hud-label">角速度 ω</span>
+                <span class="hud-value" id="hud-w">1.24</span>
+                <span class="hud-unit">rad/s</span>
+              </div>
+              <div class="hud-item is-accent">
+                <span class="hud-label">角动量 L = Iω</span>
+                <span class="hud-value" id="hud-L">2.40</span>
+                <span class="hud-unit">kg·m²/s</span>
+              </div>
+              <div class="hud-item">
+                <span class="hud-label">转动动能 Eₖ</span>
+                <span class="hud-value" id="hud-E">1.48</span>
+                <span class="hud-unit">J</span>
+              </div>
+              <div class="hud-item hud-delta" id="hud-delta-wrap">
+                <span class="hud-label">L 相对偏差</span>
+                <span class="hud-value" id="hud-dL">0.00%</span>
+                <span class="hud-unit" id="hud-delta-note">守恒</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="lab-side">
+            <div class="card control-card">
+              <div class="card-head">
+                <h3>实验控制</h3>
+                <span class="card-tag">LIVE</span>
+              </div>
+
+              <label class="field" for="r-range">
+                <span class="field-row"><span>配重半径 r</span><output id="r-value">0.60 m</output></span>
+                <input type="range" id="r-range" min="0.15" max="0.75" step="0.01" value="0.60">
+                <span class="field-hint">向内收臂 → I 减小 → ω 增大</span>
+              </label>
+
+              <label class="field" for="w-range">
+                <span class="field-row"><span>初始角速度 ω₀</span><output id="w-value">1.20 rad/s</output></span>
+                <input type="range" id="w-range" min="0.2" max="3" step="0.05" value="1.2">
+                <span class="field-hint">调整后将以新的角动量重新开始</span>
+              </label>
+
+              <div class="switch-row">
+                <div>
+                  <strong>轴承摩擦</strong>
+                  <small>开启后出现外力矩，L 不再守恒</small>
+                </div>
+                <button class="switch" id="friction-toggle" role="switch" aria-checked="false" aria-label="轴承摩擦开关"><span></span></button>
+              </div>
+
+              <div class="control-actions">
+                <button class="btn btn-ghost" id="btn-reset">
+                  <svg class="icon"><use href="#i-reset"/></svg>复位实验
+                </button>
+                <button class="btn btn-primary" id="btn-quick-record">记录一组</button>
+              </div>
+            </div>
+
+            <div class="card task-card">
+              <div class="card-head">
+                <h3>实验任务</h3>
+                <span class="card-tag" id="task-progress">0 / 3</span>
+              </div>
+              <div class="task-list" id="task-list">
+                <button class="task is-open" data-task="t1">
+                  <span class="task-index">01</span>
+                  <span class="task-info"><strong>观察守恒</strong><small>收臂并记录 ≥3 组数据</small></span>
+                  <span class="task-score" data-task-score="t1">—</span>
+                </button>
+                <button class="task" data-task="t2">
+                  <span class="task-index">02</span>
+                  <span class="task-info"><strong>定量预测</strong><small>预测 r=0.30 m 时的 ω</small></span>
+                  <span class="task-score" data-task-score="t2">—</span>
+                </button>
+                <button class="task" data-task="t3">
+                  <span class="task-index">03</span>
+                  <span class="task-info"><strong>能量解释</strong><small>AI 评估你的物理解释</small></span>
+                  <span class="task-score" data-task-score="t3">—</span>
+                </button>
+              </div>
+              <div class="task-panel" id="task-panel"></div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="lower-grid">
+          <div class="card chart-card">
+            <div class="card-head">
+              <div>
+                <h3>I–ω 反比关系</h3>
+                <p class="card-sub">每个测量点都应落在同一条双曲线 L = Iω 上</p>
+              </div>
+              <div class="chart-legend"><span class="lg lg-curve"></span>理论曲线<span class="lg lg-dot"></span>实测点</div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chart-canvas" aria-label="转动惯量与角速度关系图"></canvas>
+              <div class="chart-empty" id="chart-empty">记录第一组数据后，这里会出现你的测量点</div>
+            </div>
+          </div>
+
+          <div class="card data-card">
+            <div class="card-head">
+              <div>
+                <h3>测量记录</h3>
+                <p class="card-sub"><span id="data-count">0</span> 组 · 自动验证 L 是否守恒</p>
+              </div>
+              <div class="mini-actions">
+                <button class="text-btn" id="btn-export-csv">导出 CSV</button>
+                <button class="text-btn danger" id="btn-clear-data">清空</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>#</th><th>r / m</th><th>I / kg·m²</th><th>ω / rad·s⁻¹</th><th>L / kg·m²·s⁻¹</th><th>Eₖ / J</th><th>偏差</th></tr>
+                </thead>
+                <tbody id="data-tbody">
+                  <tr class="empty-row"><td colspan="7">还没有数据。转动平台，拖动哑铃，然后点击「记录数据」。</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 碰撞实验 ================= -->
+      <section class="view" id="view-collision" role="tabpanel" aria-label="子弹撞杆碰撞实验">
+        <div class="page-intro">
+          <div>
+            <span class="eyebrow">EXPERIMENT 02</span>
+            <h2>子弹击杆 · 角动量还守恒吗？</h2>
+            <p>碰撞时间极短，支点的冲力对支点力矩为零；绕支点的角动量守恒。但机械能会大量损失。</p>
+          </div>
+          <div class="intro-formula">
+            <math><mi>m</mi><mi>v</mi><mi>d</mi><mo>=</mo><msub><mi>I</mi><mrow><mi>after</mi></mrow></msub><mi>ω</mi></math>
+          </div>
+        </div>
+
+        <div class="collision-grid">
+          <div class="card stage-card">
+            <div class="stage-head">
+              <div class="stage-title">
+                <span class="live-dot" aria-hidden="true"></span>
+                <h2>光滑桌面 · 俯视</h2>
+                <span class="pill" id="c-phase">待发射</span>
+              </div>
+              <div class="stage-actions">
+                <button class="stage-btn" id="btn-fire">
+                  <svg class="icon"><use href="#i-play"/></svg><span>发射子弹</span>
+                </button>
+                <button class="stage-btn" id="btn-c-reset">
+                  <svg class="icon"><use href="#i-reset"/></svg><span>复位</span>
+                </button>
+              </div>
+            </div>
+            <div class="stage-canvas-wrap collision-stage">
+              <canvas id="collision-canvas" aria-label="俯视视角：子弹自左向右击中竖直杆，杆绕中心支点旋转"></canvas>
+              <div class="canvas-hint"><span class="hint-dot"></span>先预测，再发射，对比你的答案</div>
+              <div class="canvas-badge" id="c-speed-badge">p = m·v</div>
+            </div>
+            <div class="hud">
+              <div class="hud-item">
+                <span class="hud-label">角动量 L</span>
+                <span class="hud-value" id="c-hud-L">—</span>
+                <span class="hud-unit">kg·m²/s</span>
+              </div>
+              <div class="hud-item">
+                <span class="hud-label">碰后转动惯量 I</span>
+                <span class="hud-value" id="c-hud-I">—</span>
+                <span class="hud-unit">kg·m²</span>
+              </div>
+              <div class="hud-item is-accent">
+                <span class="hud-label">碰后角速度 ω</span>
+                <span class="hud-value" id="c-hud-w">?</span>
+                <span class="hud-unit">rad/s</span>
+              </div>
+              <div class="hud-item">
+                <span class="hud-label">能量损失</span>
+                <span class="hud-value" id="c-hud-loss">—</span>
+                <span class="hud-unit">%</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="collision-side">
+            <div class="card control-card">
+              <div class="card-head">
+                <h3>碰撞参数</h3>
+                <span class="card-tag">BEFORE</span>
+              </div>
+              <label class="field" for="c-mass">
+                <span class="field-row"><span>子弹质量 m</span><output id="c-mass-value">20 g</output></span>
+                <input type="range" id="c-mass" min="5" max="50" step="1" value="20">
+              </label>
+              <label class="field" for="c-speed">
+                <span class="field-row"><span>子弹速度 v</span><output id="c-speed-value">300 m/s</output></span>
+                <input type="range" id="c-speed" min="50" max="500" step="10" value="300">
+              </label>
+              <label class="field" for="c-offset">
+                <span class="field-row"><span>击点距支点 d</span><output id="c-offset-value">0.30 m</output></span>
+                <input type="range" id="c-offset" min="0.05" max="0.38" step="0.01" value="0.30">
+              </label>
+              <div class="fixed-spec">
+                <span>杆质量 M <b>1.0 kg</b></span>
+                <span>杆长 <b>0.80 m</b></span>
+                <span>支点 <b>中心</b></span>
+              </div>
+            </div>
+
+            <div class="card predict-card">
+              <div class="card-head">
+                <h3>先预测，再实验</h3>
+                <span class="card-tag amber">AI 任务</span>
+              </div>
+              <p class="predict-tip">运用 <b>mvd = Iω</b> 估算碰撞后的角速度。允许 10% 误差。</p>
+              <div class="predict-row">
+                <input type="number" id="predict-input" inputmode="decimal" step="0.01" placeholder="预测 ω / rad·s⁻¹" aria-label="预测碰后角速度">
+                <button class="btn btn-primary btn-sm" id="btn-predict">提交预测</button>
+              </div>
+              <div class="predict-feedback" id="predict-feedback">还没有提交预测。先算一算，再发射。</div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="lower-grid collision-lower">
+          <div class="card energy-card">
+            <div class="card-head">
+              <div><h3>能量去哪了？</h3><p class="card-sub">角动量守恒 ≠ 机械能守恒</p></div>
+              <span class="pill pill-amber">非弹性碰撞</span>
+            </div>
+            <div class="energy-bars">
+              <div class="energy-row">
+                <span class="energy-label">碰撞前 · 子弹动能</span>
+                <div class="energy-track"><div class="energy-fill before" id="energy-before-bar"></div></div>
+                <span class="energy-num" id="energy-before">— J</span>
+              </div>
+              <div class="energy-row">
+                <span class="energy-label">碰撞后 · 转动动能</span>
+                <div class="energy-track"><div class="energy-fill after" id="energy-after-bar"></div></div>
+                <span class="energy-num" id="energy-after">— J</span>
+              </div>
+            </div>
+            <p class="energy-note" id="energy-note">发射后显示能量对比。损失的能量转化为形变内能、热与声。</p>
+          </div>
+
+          <div class="card concept-card">
+            <div class="card-head">
+              <h3>关键辨析</h3>
+              <span class="card-tag">AI 会考你</span>
+            </div>
+            <ul class="concept-list">
+              <li><b>角动量守恒</b><span>碰撞瞬间，绕支点的合外力矩为零；支点冲力过支点，力矩为零。</span></li>
+              <li><b>线动量不守恒</b><span>支点对杆有冲力，系统所受合外力不为零。</span></li>
+              <li><b>机械能不守恒</b><span>子弹嵌入杆是完全非弹性碰撞，能量转化为内能。</span></li>
+            </ul>
+            <button class="btn btn-ghost btn-sm" id="btn-collision-ai">让 AI 用数字讲一遍</button>
+          </div>
+
+          <div class="card collision-task-card">
+            <div class="card-head">
+              <div>
+                <h3>任务 5 · 能量去哪了</h3>
+                <p class="card-sub">用 30 字以上解释，AI 按概念量规评分（8 分）</p>
+              </div>
+              <span class="card-tag amber">AI 评分</span>
+            </div>
+            <textarea id="t5-input" rows="3" maxlength="500" placeholder="提示：角动量守恒、支点冲力、线动量、完全非弹性、内能…"></textarea>
+            <div class="reflection-foot">
+              <span id="t5-count">0 / 500</span>
+              <button class="btn btn-primary btn-sm" id="btn-t5">提交 AI 评分</button>
+            </div>
+            <div class="reflection-feedback" id="t5-feedback" hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 智能测评 ================= -->
+      <section class="view" id="view-quiz" role="tabpanel" aria-label="智能测评">
+        <div class="page-intro">
+          <div>
+            <span class="eyebrow">ADAPTIVE ASSESSMENT</span>
+            <h2>智能测评 · 越答越懂你</h2>
+            <p>AI 根据你的答题表现动态选择下一题，定位薄弱概念，并给出针对性纠错。</p>
+          </div>
+          <div class="mastery-strip" id="quiz-mastery" aria-label="概念掌握度"></div>
+        </div>
+
+        <div class="quiz-shell">
+          <div class="card quiz-intro" id="quiz-intro">
+            <div class="quiz-intro-icon"><svg class="icon"><use href="#i-target"/></svg></div>
+            <h3>8 道自适应题目 · 约 5 分钟</h3>
+            <p>覆盖角动量定义、守恒条件、定量计算、能量与碰撞。答错不是扣分，而是 AI 调整讲解的依据。</p>
+            <div class="quiz-stats">
+              <div><b id="quiz-best">—</b><span>历史最佳</span></div>
+              <div><b id="quiz-attempts">0</b><span>测评次数</span></div>
+              <div><b id="quiz-mastery-avg">50%</b><span>平均掌握</span></div>
+            </div>
+            <button class="btn btn-primary btn-lg" id="btn-quiz-start">开始智能测评<svg class="icon"><use href="#i-arrow"/></svg></button>
+            <p class="quiz-fineprint">题目由本地引擎生成，无需联网；如已配置大模型，AI 讲解会由云端增强。</p>
+          </div>
+
+          <div class="card quiz-active" id="quiz-active" hidden>
+            <div class="quiz-top">
+              <div class="quiz-progress-wrap">
+                <div class="quiz-progress"><span id="quiz-progress-bar"></span></div>
+                <span class="quiz-step" id="quiz-step">第 1 题 / 8</span>
+              </div>
+              <div class="quiz-score-chip">正确 <b id="quiz-correct">0</b></div>
+            </div>
+            <div class="quiz-concept" id="quiz-concept">概念理解</div>
+            <h3 class="quiz-stem" id="quiz-stem"></h3>
+            <div class="quiz-body" id="quiz-options"></div>
+            <div class="quiz-numeric" id="quiz-numeric" hidden>
+              <input type="number" id="quiz-number" inputmode="decimal" step="any" placeholder="输入数值">
+              <span id="quiz-unit">rad/s</span>
+            </div>
+            <div class="quiz-feedback" id="quiz-feedback" hidden></div>
+            <div class="quiz-actions">
+              <button class="btn btn-primary" id="btn-quiz-submit">提交答案</button>
+              <button class="btn btn-ghost" id="btn-quiz-next" hidden>下一题<svg class="icon"><use href="#i-arrow"/></svg></button>
+            </div>
+          </div>
+
+          <div class="card quiz-done" id="quiz-done" hidden>
+            <div class="score-ring" id="quiz-score-ring"><div><b id="quiz-final-score">0</b><span>/ 100</span></div></div>
+            <h3 id="quiz-done-title">测评完成</h3>
+            <p id="quiz-done-sub">AI 已根据你的作答更新概念掌握度。</p>
+            <div class="quiz-summary" id="quiz-summary"></div>
+            <div class="quiz-done-actions">
+              <button class="btn btn-primary" id="btn-quiz-report">查看学习报告</button>
+              <button class="btn btn-ghost" id="btn-quiz-retry">再测一次</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 学习报告 ================= -->
+      <section class="view" id="view-report" role="tabpanel" aria-label="学习报告">
+        <div class="report-head">
+          <div>
+            <span class="eyebrow">LEARNING REPORT</span>
+            <h2>学习报告</h2>
+            <p>操作数据、测评结果与 AI 评价汇总为一份可打印的实验档案。</p>
+          </div>
+          <div class="report-actions">
+            <input class="name-input" id="report-name" maxlength="20" placeholder="输入你的名字（可选）" aria-label="学生姓名">
+            <button class="btn btn-ghost" id="btn-export-json">导出档案</button>
+            <button class="btn btn-primary" id="btn-print"><svg class="icon"><use href="#i-report"/></svg>打印报告</button>
+          </div>
+        </div>
+
+        <div class="report-grid">
+          <div class="card score-card">
+            <div class="score-orbit" id="rep-ring">
+              <div class="score-orbit-inner"><b id="rep-total">0</b><span>总分 / 100</span></div>
+            </div>
+            <div class="score-meta">
+              <span class="level-badge" id="rep-level">待开始</span>
+              <p id="rep-verdict">完成实验任务与智能测评后，这里会生成你的综合表现。</p>
+            </div>
+            <div class="breakdown" id="rep-breakdown"></div>
+          </div>
+
+          <div class="card radar-card">
+            <div class="card-head">
+              <h3>能力雷达</h3>
+              <span class="card-tag">AI 评估</span>
+            </div>
+            <div class="radar-wrap"><canvas id="radar-canvas" aria-label="五维能力雷达图"></canvas></div>
+            <div class="radar-legend" id="radar-legend"></div>
+          </div>
+
+          <div class="card ai-comment-card">
+            <div class="card-head">
+              <h3><svg class="icon spark-icon"><use href="#i-spark"/></svg>AI 学习诊断</h3>
+              <span class="card-tag">实时生成</span>
+            </div>
+            <div class="ai-comment" id="rep-ai">完成一次实验或测评，AI 会在这里给出基于你数据的诊断。</div>
+            <div class="next-steps" id="rep-next"></div>
+          </div>
+
+          <div class="card data-summary-card">
+            <div class="card-head"><h3>实验数据摘要</h3><span class="card-tag" id="rep-data-tag">0 组</span></div>
+            <div class="data-summary" id="rep-data">尚未记录实验数据。</div>
+          </div>
+
+          <div class="card quiz-summary-card">
+            <div class="card-head"><h3>测评记录</h3><span class="card-tag" id="rep-quiz-tag">未测评</span></div>
+            <div class="quiz-recap" id="rep-quiz">还没有完成智能测评。</div>
+          </div>
+
+          <div class="card reflection-card">
+            <div class="card-head">
+              <h3>学习反思</h3>
+              <span class="card-tag">AI 评分 20 分</span>
+            </div>
+            <p class="reflection-prompt">用 80 字以上解释：收臂时角动量为什么守恒，而转动动能却会增加？能量来自哪里？</p>
+            <textarea id="reflection-input" rows="5" maxlength="600" placeholder="写下你的理解，AI 会按概念覆盖度评分并指出遗漏…"></textarea>
+            <div class="reflection-foot">
+              <span id="reflection-count">0 / 600</span>
+              <button class="btn btn-primary btn-sm" id="btn-reflection-score">AI 评分</button>
+            </div>
+            <div class="reflection-feedback" id="reflection-feedback" hidden></div>
+          </div>
+        </div>
+
+        <div class="card report-task-card">
+          <div class="card-head">
+            <h3>任务完成度</h3>
+            <span class="card-tag" id="rep-task-tag">0 / 5</span>
+          </div>
+          <div class="report-task-list" id="rep-tasks"></div>
+          <div class="report-footer">
+            <span>角动量守恒 · 虚拟仿真实验室</span>
+            <span id="rep-timestamp"></span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© 2026 角动量实验室 · 大学物理课程项目</span>
+      <span class="footer-links">
+        <a href="https://J66k6.github.io/wulizuoye/" target="_blank" rel="noopener">在线访问</a>
+        <a href="https://github.com/J66k6/wulizuoye" target="_blank" rel="noopener">GitHub</a>
+        <button class="linkish" id="btn-footer-about">方案与声明</button>
+      </span>
+    </footer>
+  </div>
+
+  <!-- AI 助教抽屉 -->
+  <aside class="tutor-drawer" id="tutor-drawer" aria-label="AI 助教" aria-hidden="true">
+    <div class="tutor-head">
+      <div class="tutor-title">
+        <span class="ai-orb" aria-hidden="true"></span>
+        <div>
+          <strong>AI 物理助教</strong>
+          <span id="tutor-engine-label">本地引擎 · 上下文感知</span>
+        </div>
+      </div>
+      <div class="tutor-head-actions">
+        <button class="icon-btn icon-btn-sm" id="btn-speak" aria-label="朗读开关" aria-pressed="false" title="语音朗读">
+          <svg class="icon"><use href="#i-volume"/></svg>
+        </button>
+        <button class="icon-btn icon-btn-sm" id="btn-tutor-settings" aria-label="AI 设置" title="AI 设置">
+          <svg class="icon"><use href="#i-settings"/></svg>
+        </button>
+        <button class="icon-btn icon-btn-sm" id="tutor-close" aria-label="关闭助教">
+          <svg class="icon"><use href="#i-close"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tutor-settings" id="tutor-settings" hidden>
+      <div class="switch-row compact">
+        <div><strong>语音朗读</strong><small>用中文语音播报 AI 回复</small></div>
+        <button class="switch" id="voice-toggle" role="switch" aria-checked="false" aria-label="语音朗读开关"><span></span></button>
+      </div>
+      <div class="switch-row compact">
+        <div><strong>实验音效</strong><small>记录、碰撞与提示音</small></div>
+        <button class="switch" id="sound-toggle" role="switch" aria-checked="true" aria-label="实验音效开关"><span></span></button>
+      </div>
+      <div class="switch-row compact">
+        <div><strong>云端大模型</strong><small>可选，失败时自动回退本地引擎</small></div>
+        <button class="switch" id="llm-toggle" role="switch" aria-checked="false" aria-label="云端大模型开关"><span></span></button>
+      </div>
+      <div class="llm-fields" id="llm-fields" hidden>
+        <label>接口地址<input id="llm-endpoint" type="url" placeholder="https://api.deepseek.com/v1/chat/completions"></label>
+        <label>模型名称<input id="llm-model" type="text" placeholder="deepseek-chat"></label>
+        <label>API Key<input id="llm-key" type="password" placeholder="仅保存在本浏览器会话"></label>
+        <p class="llm-note">仅当你填写 Key 并开启时才会联网。若接口不支持浏览器跨域，将自动使用本地引擎。</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btn-save-settings">保存设置</button>
+    </div>
+
+    <div class="chat-log" id="chat-log" aria-live="polite"></div>
+    <div class="chat-chips" id="chat-chips">
+      <button data-prompt="这个实验怎么玩？">怎么玩？</button>
+      <button data-prompt="为什么收臂后角速度会变大？">为什么变快？</button>
+      <button data-prompt="我现在应该做什么？">下一步</button>
+      <button data-prompt="出题考考我">考考我</button>
+      <button data-prompt="帮我分析刚才的数据">分析数据</button>
+    </div>
+    <div class="chat-input-wrap">
+      <button class="icon-btn mic-btn" id="btn-mic" aria-label="语音输入" title="语音输入">
+        <svg class="icon"><use href="#i-mic"/></svg>
+      </button>
+      <textarea id="chat-input" rows="1" placeholder="问一个物理问题…" aria-label="向 AI 助教提问"></textarea>
+      <button class="send-btn" id="btn-send" aria-label="发送">
+        <svg class="icon"><use href="#i-send"/></svg>
+      </button>
+    </div>
+    <p class="tutor-disclaimer">AI 回复基于本地物理引擎与教学规则生成，重要结论请以教材为准。</p>
+  </aside>
+  <div class="drawer-scrim" id="drawer-scrim" hidden></div>
+
+  <!-- 关于 / 帮助 -->
+  <div class="modal" id="modal-about" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="modal-card">
+      <button class="icon-btn modal-close" id="about-close" aria-label="关闭">
+        <svg class="icon"><use href="#i-close"/></svg>
+      </button>
+      <span class="eyebrow">ABOUT THE LAB</span>
+      <h2 id="about-title">角动量守恒 · 虚拟仿真实验室</h2>
+      <p class="about-lead">一个为大学物理课程设计的轻量级 H5 实验：无需安装，打开浏览器即可完成「预测—操作—测量—分析—反思」的完整探究流程。</p>
+
+      <div class="about-grid">
+        <section>
+          <h3>两个实验场景</h3>
+          <p><b>旋转平台：</b>拖动哑铃改变转动惯量，实时观察 ω 与 Eₖ 的变化，验证 L = Iω 守恒。</p>
+          <p><b>子弹击杆：</b>调节质量、速度与击点，预测并验证碰后角速度，理解「角动量守恒但机械能不守恒」。</p>
+        </section>
+        <section>
+          <h3>AI 如何参与</h3>
+          <p>本地教学引擎读取实时物理量，识别概念迷思，给出苏格拉底式提示；自适应测评按掌握度选题；AI 依据你的真实数据生成诊断与报告。</p>
+        </section>
+        <section>
+          <h3>使用建议</h3>
+          <p>桌面端获得最佳拖拽体验；手机端可横屏或全屏。建议先完成实验台 3 个任务，再做智能测评，最后写学习反思。</p>
+        </section>
+        <section>
+          <h3>技术栈</h3>
+          <p>原生 HTML / CSS / ES Modules，Canvas 2D 渲染，Web Audio 合成音效，Web Speech 语音，GitHub Pages 托管；二维码使用 MIT 协议的 qrcode-generator。零构建、零后端。</p>
+        </section>
+      </div>
+
+      <div class="about-bottom">
+        <div>
+          <h3>扫码在手机上打开</h3>
+          <p class="about-url">https://J66k6.github.io/wulizuoye/</p>
+          <div class="qr-box" id="about-qr"><span>二维码生成中…</span></div>
+        </div>
+        <div class="about-links">
+          <h3>更多</h3>
+          <a href="https://github.com/J66k6/wulizuoye" target="_blank" rel="noopener">GitHub 仓库</a>
+          <a href="./docs/方案文档.md" target="_blank">方案文档（Markdown）</a>
+          <button class="linkish" id="btn-reset-all">清除本机学习数据</button>
+          <p class="about-credit">AI 辅助编程：DeepSeek 等大模型参与架构讨论、代码生成与文案润色；物理模型、实验设计与最终校验由作者完成。详见方案文档「学术诚信声明」。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+  <noscript>
+    <div class="noscript">本实验依赖 JavaScript 运行。请在浏览器设置中启用 JavaScript，然后刷新页面。</div>
+  </noscript>
+
+  <script src="./assets/js/vendor/qrcode.min.js"></script>
+  <script type="module" src="./assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# 本地验收与截图输出
+qa/
+.edge-profile/
+*.log
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 依赖（本项目无运行时依赖，仅保留占位）
+node_modules/

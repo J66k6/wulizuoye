@@ -1,0 +1,12 @@
+{
+  "name": "angular-momentum-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "角动量守恒定律 · 可交互 / 可对话 / 可评估的 H5 虚拟仿真实验",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "test": "node tests/physics.test.mjs && node tests/quiz.test.mjs"
+  },
+  "license": "MIT"
+}
